@@ -92,7 +92,6 @@ void setup()
   print_config();
   start_flank();
   Timer1.initialize(bitPeriod);
-  Serial.println(strRTCDateTime());
   init_led();
 }
 
@@ -161,7 +160,7 @@ void loop() {
     case STATE_PROCESS_MESSAGE:
       stop_flank();
       stop_timer();
- 
+
       decode_wordbuffer();
 
       memset(wordbuffer, 0, sizeof(wordbuffer));
@@ -175,7 +174,7 @@ void loop() {
   if (fsa_timeout_minutes > 0) {
     if (last_pmb_millis > millis())
       last_pmb_millis = millis();
-    if (!field_strength_alarm && (last_pmb_millis == 0 || millis() - last_pmb_millis > fsa_timeout_minutes*60000)) {
+    if (!field_strength_alarm && (last_pmb_millis == 0 || millis() - last_pmb_millis > fsa_timeout_minutes * 60000)) {
       Serial.println("\r\n=== [" + strRTCDateTime() + "] +++ Field Strength Alarm! +++");
       field_strength_alarm = true;
       if (enable_led) enable_fsaled();
@@ -185,13 +184,16 @@ void loop() {
 
   if (Serial.available()) {
     while (Serial.available()) {
-      serialbuffer[serialbuffer_counter] = Serial.read();
-      Serial.print(serialbuffer[serialbuffer_counter]);
-      if (serialbuffer[serialbuffer_counter] == '\r' || serialbuffer[serialbuffer_counter] == '\n') {
+      char inChr = Serial.read();
+      if (inChr == '\r') {
         process_serial_input();
         memset(serialbuffer, 0, sizeof(serialbuffer));
         serialbuffer_counter = 0;
-      } else if (serialbuffer_counter < sizeof(serialbuffer) - 1) serialbuffer_counter++;
+      } else {
+        serialbuffer[serialbuffer_counter] = inChr;
+        Serial.print(serialbuffer[serialbuffer_counter]);
+        if (serialbuffer_counter < sizeof(serialbuffer) - 1) serialbuffer_counter++;
+      }
     }
   }
 }

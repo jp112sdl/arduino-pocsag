@@ -1,18 +1,19 @@
 void print_config() {
-  String strpcheck =  ((enable_paritycheck == true) ? F("Parity Check           ON")     : F("Parity Check           OFF"));
-  String strrtc    =  ((enable_rtc         == true) ? F("Real Time Clock        ON")     : F("Real Time Clock        OFF"));
-  String strecc =                                     F("ECC-Mode               OFF");
-  if (ecc_mode == 1) strecc =                         F("ECC-Mode               1 bit");
-  if (ecc_mode == 2) strecc =                         F("ECC-Mode               2 bit");
-  if (ecc_mode == 3) strecc =                         F("ECC-Mode               >2 bit");
-  String strled =  ((enable_led == true) ?            F("LED                    ON")     : F("LED                    OFF"));
-  String strfsa =  ((fsa_timeout_minutes > 0) ?   String("Field Strength Alarm   ON (" + String(fsa_timeout_minutes) + " min.)")     : F("Field Strength Alarm   OFF"));
-  String strdebug =                                   F("Debug Level            OFF (0)");
-  if (debugLevel == 1) strdebug =                     F("Debug Level            CW 0+1 ");
-  if (debugLevel == 2) strdebug =                     F("Debug Level            ALL (2)");
-  String strinvert =  ((invert_signal == FALLING) ?   F("Input Level            NORMAL") : F("Input Level            INV."));
+  String strpcheck =  ((enable_paritycheck == true) ?        F("Parity Check           ON")                                               :        F("Parity Check           OFF"));
+  String strrtc    =  ((enable_rtc         == true) ? String(F("Real Time Clock        ON (")) + strRTCDateTime() +F(")")                 : String(F("Real Time Clock        OFF")));
+  String strecc =                                            F("ECC-Mode               OFF");
+  if (ecc_mode == 1) strecc =                                F("ECC-Mode               1 bit");
+  if (ecc_mode == 2) strecc =                                F("ECC-Mode               2 bit");
+  if (ecc_mode == 3) strecc =                                F("ECC-Mode               >2 bit");
+  String strmax_allowd_cw_errors =                    String(F("Max. # of CW w/ Errors ")) + String(max_allowd_cw_errors);
+  String strled =  ((enable_led == true) ?                   F("LED                    ON")                                               :        F("LED                    OFF"));
+  String strfsa =  ((fsa_timeout_minutes > 0)?        String(F("Field Strength Alarm   ON (")) + String(fsa_timeout_minutes) + " min.)"   : String(F("Field Strength Alarm   OFF")));
+  String strdebug =                                          F("Debug Level            OFF (0)");
+  if (debugLevel == 1) strdebug =                            F("Debug Level            CW 0+1 ");
+  if (debugLevel == 2) strdebug =                            F("Debug Level            ALL (2)");
+  String strinvert =  ((invert_signal == FALLING) ?          F("Input Level            NORMAL")                                           :        F("Input Level            INV."));
 
-  Serial.println(String(F("******** current config ********\r\n")) + strpcheck + F("\r\n") + strdebug + F("\r\n") + strecc + F("\r\n") + strled + F("\r\n") + strinvert + F("\r\n") + strfsa + F("\r\n") + strrtc);
+  Serial.println(String(F("******** current config ********\r\n")) + strpcheck + F("\r\n") + strdebug + F("\r\n") + strecc + F("\r\n") + strmax_allowd_cw_errors + F("\r\n") + strled + F("\r\n") + strinvert + F("\r\n") + strfsa + F("\r\n") + strrtc);
 }
 
 void process_serial_input() {
