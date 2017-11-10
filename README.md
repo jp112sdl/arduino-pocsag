@@ -21,8 +21,6 @@ To show configuration help, type "sh" in a serial terminal (115200 baud).
 
 | command | used for |
 |----------|-------------|
-| p0 | Parity Check disabled |
-| p1 | Parity Check enabled |
 | c0 | Real Time Clock disabled / not installed |
 | c1 | Real Time Clock enabled |
 | d0 | Debug Output OFF |
@@ -36,6 +34,12 @@ To show configuration help, type "sh" in a serial terminal (115200 baud).
 | l1 | LEDs enabled |
 | i0 | Input normal |
 | i1 | Input inverted (used for LX4 receiver board!)|
-| ftnnn | Field Strength Alarm (nnn minutes; 0 = off) |
-| menn | max. number of allowed codewords with incorrectable errors |
-| time | set time = time dd.mm.yyyy hh:mm:ss |
+| p0 | Parity Check disabled |
+| p1 | Parity Check enabled |
+| u0 | Umlaut-Replace disabled |
+| u1 | Umlaut-Replace enabled |
+| ft n | Field Strength Alarm (n minutes; 0 = off) |
+| me n | max. number (n) of allowed codewords with incorrectable errors |
+| rics x - y | RIC-Filter. Message output only from RIC x to RIC y; set both to 0 to disable filter |
+| time dd.mm.yyyy hh:mm:ss | set time |
+| time | prints current rtc time |
