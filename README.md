@@ -51,5 +51,5 @@ To show configuration help, type "sh" in a serial terminal (115200 baud).
 - an asterisk shows, that an detected error was corrected. if there is no asterisk, the (not corrected) bit error was in the redundancy part of the codeword
 <br>
 Each decoding ends with the following line (statistic information):<br>
-`=== [00.00.0000 00:00:00] CW(16) 37ms ===`<br>
+=== [00.00.0000 00:00:00] CW(16) 37ms ===<br>
 - at time (in brackets), 16 codewords were decoded which took 37 milliseconds.
