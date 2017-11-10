@@ -43,3 +43,13 @@ To show configuration help, type "sh" in a serial terminal (115200 baud).
 | rics x - y | RIC-Filter. Message output only from RIC x to RIC y; set both to 0 to disable filter |
 | time dd.mm.yyyy hh:mm:ss | set time |
 | time | prints current rtc time |
+
+
+<br><br>**Debug output:**<br>
+`cw[0] = 2181040895; // (1) * `<br>
+- codeword 1 (zero based index!) has the value `10000010000000000000101011111111` (decimal converted 2181040895) with 1 bit error.
+- an asterisk shows, that an detected error was corrected. if there is no asterisk, the (not corrected) bit error was in the redundancy part of the codeword
+<br>
+Each decoding ends with the following line (statistic information):<br>
+`=== [00.00.0000 00:00:00] CW(16) 37ms ===`<br>
+- at time (in brackets), 16 codewords were decoded which took 37 milliseconds.
