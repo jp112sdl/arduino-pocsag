@@ -83,7 +83,7 @@ String strRTCDateTime() {
     }
     result += sekunde;
     return result;
-  } else return "00.00.0000 00:00:00";
+  } else return "";
 }
 
 boolean checkDateTime(int jahr, int monat, int tag, int stunde, int minute, int sekunde) {
