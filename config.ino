@@ -95,5 +95,12 @@ void eeprom_read_userconfig() {
   if (UserConfig.ecc_mode > 0) setupecc();
   if (UserConfig.fromRIC == 4294950216) UserConfig.fromRIC = 0;
   if (UserConfig.toRIC == 4294950216) UserConfig.toRIC = 0;
+  if (!UserConfig.enable_led) {
+    disable_pmbled();
+    disable_syncled();
+    disable_fsaled();
+  } else {
+    if (field_strength_alarm) enable_fsaled();
+  }
 
 }
