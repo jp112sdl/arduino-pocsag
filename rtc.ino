@@ -33,7 +33,7 @@ byte bcdToDec(byte val) {
   return ( (val / 16 * 10) + (val % 16) );
 }
 
-int getIntFromString (char *stringWithInt, byte num) {
+uint32_t getIntFromString (char *stringWithInt, byte num) {
   char *tail;
   while (num > 0) {
     num--;

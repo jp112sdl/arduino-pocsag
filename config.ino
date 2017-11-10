@@ -13,8 +13,9 @@ void print_config() {
   if (UserConfig.debugLevel == 1) strdebug =                            F("Debug Level            CW 0+1 ");
   if (UserConfig.debugLevel == 2) strdebug =                            F("Debug Level            ALL (2)");
   String strinvert =  ((UserConfig.invert_signal == FALLING) ?          F("Input Level            NORMAL")                                           :        F("Input Level            INV."));
+  String strricfilter = ((UserConfig.fromRIC != 0 && UserConfig.toRIC != 0) ? String(F("RIC-Filter             ")) + String(UserConfig.fromRIC) + " - " + String(UserConfig.toRIC) : String(F("RIC-Filter             OFF")));
 
-  Serial.println(String(F("******** current config ********\r\n")) + strpcheck + F("\r\n") + strdebug + F("\r\n") + strecc + F("\r\n") + strmax_allowd_cw_errors + F("\r\n") + strled + F("\r\n") + strinvert + F("\r\n") + strfsa + F("\r\n") + strrtc + F("\r\n") + struml);
+  Serial.println(String(F("******** current config ********\r\n")) + strpcheck + F("\r\n") + strdebug + F("\r\n") + strecc + F("\r\n") + strmax_allowd_cw_errors + F("\r\n") + strled + F("\r\n") + strinvert + F("\r\n") + strfsa + F("\r\n") + strrtc + F("\r\n") + struml + F("\r\n") + strricfilter);
 }
 
 void process_serial_input() {
@@ -68,6 +69,11 @@ void process_serial_input() {
         UserConfig.invert_signal = RISING;
     }
 
+    if (strstr(serialbuffer, "rics")) {
+      UserConfig.fromRIC = getIntFromString(serialbuffer, 1);
+      UserConfig.toRIC   = getIntFromString(serialbuffer, 2);
+    }
+
     if (strstr(serialbuffer, "ft"))
       UserConfig.fsa_timeout_minutes = getIntFromString(serialbuffer, 1);
 
@@ -87,4 +93,7 @@ void process_serial_input() {
 void eeprom_read_userconfig() {
   eeprom_read_block((void*)&UserConfig, (void*)0, sizeof(UserConfig));
   if (UserConfig.ecc_mode > 0) setupecc();
+  if (UserConfig.fromRIC == 4294950216) UserConfig.fromRIC = 0;
+  if (UserConfig.toRIC == 4294950216) UserConfig.toRIC = 0;
+
 }

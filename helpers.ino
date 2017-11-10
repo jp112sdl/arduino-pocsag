@@ -129,7 +129,7 @@ void stop_flank() {
 }
 
 void print_message(unsigned long s_address, byte function, char message[MSGLENGTH]) {
-  if (s_address > 1949000 && s_address < 1955000) {
+  if ((s_address > UserConfig.fromRIC && s_address < UserConfig.toRIC) || UserConfig.fromRIC == 0 || UserConfig.toRIC == 0 ) {
     String strMessage = "";
     for (int i = 0; i < MSGLENGTH; i++)  {
       if (message[i] > 31 && message[i] < 128) {

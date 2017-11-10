@@ -66,8 +66,8 @@ struct userconfig_t {
   byte invert_signal = RISING;
   byte fsa_timeout_minutes = 10;
   byte max_allowd_cw_errors = 8;
-  uint32_t fromRIC = 1949000;
-  uint32_t toRIC = 1953000;
+  uint32_t fromRIC = 0;
+  uint32_t toRIC = 0;
 } UserConfig;
 
 //RTC Variablen
@@ -188,6 +188,7 @@ void loop() {
   }
 
   if (Serial.available()) {
+    delay(100);
     while (Serial.available()) {
       char inChr = Serial.read();
       serialbuffer[serialbuffer_counter] = inChr;
