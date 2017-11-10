@@ -231,7 +231,7 @@ void decode_wordbuffer() {
 
     if (UserConfig.enable_paritycheck) {
       if (parity(wordbuffer[i]) == 1) {
-        if (UserConfig.debugLevel == 2) Serial.println("wordbuffer[" + String(i) + "] = " + String(wordbuffer[i]) + "; PE");
+        if (UserConfig.debugLevel == 2) Serial.println("cw[" + String(i) + "] = " + String(wordbuffer[i]) + "; PE");
         continue;
       }
     }
