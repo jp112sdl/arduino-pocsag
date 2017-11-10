@@ -162,7 +162,7 @@ void print_message(unsigned long s_address, byte function, char message[MSGLENGT
             strMessage += "[0D]";
             break;
           case 127:
-            strMessage += "[EOT]";
+            strMessage += "[04]";
             break;            
           default:
             strMessage += message[i];
