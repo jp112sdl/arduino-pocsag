@@ -53,7 +53,7 @@ int getIntFromString (char *stringWithInt, byte num) {
 }
 
 String strRTCDateTime() {
-  if (enable_rtc) {
+  if (UserConfig.enable_rtc) {
     rtcReadTime();
     String result = "";
     if (tag < 10) {

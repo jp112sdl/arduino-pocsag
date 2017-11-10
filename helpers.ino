@@ -121,7 +121,7 @@ void stop_timer() {
 }
 
 void start_flank() {
-  attachInterrupt(4, flank_isr, invert_signal + 2);
+  attachInterrupt(4, flank_isr, UserConfig.invert_signal);
 }
 
 void stop_flank() {
@@ -133,40 +133,42 @@ void print_message(unsigned long s_address, byte function, char message[MSGLENGT
     String strMessage = "";
     for (int i = 0; i < MSGLENGTH; i++)  {
       if (message[i] > 31 && message[i] < 128) {
-        switch (message[i]) {
-          case '|':
-            strMessage += "ö";
-            break;
-          case '{':
-            strMessage += "ä";
-            break;
-          case '}':
-            strMessage += "ü";
-            break;
-          case '[':
-            strMessage += "Ä";
-            break;
-          case ']':
-            strMessage += "Ü";
-            break;
-          case '\\':
-            strMessage += "Ö";
-            break;
-          case '~':
-            strMessage += "ß";
-            break;
-          case '\n':
-            strMessage += "[0A]";
-            break;
-          case '\r':
-            strMessage += "[0D]";
-            break;
-          case 127:
-            strMessage += "[04]";
-            break;            
-          default:
-            strMessage += message[i];
-        }
+        if (UserConfig.enable_umlautreplace) {
+          switch (message[i]) {
+            case '|':
+              strMessage += "ö";
+              break;
+            case '{':
+              strMessage += "ä";
+              break;
+            case '}':
+              strMessage += "ü";
+              break;
+            case '[':
+              strMessage += "Ä";
+              break;
+            case ']':
+              strMessage += "Ü";
+              break;
+            case '\\':
+              strMessage += "Ö";
+              break;
+            case '~':
+              strMessage += "ß";
+              break;
+            case '\n':
+              strMessage += "[0A]";
+              break;
+            case '\r':
+              strMessage += "[0D]";
+              break;
+            case 127:
+              strMessage += "[04]";
+              break;
+            default:
+              strMessage += message[i];
+          }
+        } else strMessage += message[i];
       }
     }
     Serial.print("\r\n" + String(s_address) + ";" + functions[function] + ";" + strMessage);
@@ -183,5 +185,11 @@ void init_led() {
   disable_pmbled();
   disable_syncled();
   disable_fsaled();
+}
+
+void softRestart() {
+  Serial.println("Restarting...");
+  wdt_enable(WDTO_1S);
+  wdt_reset();
 }
 
