@@ -132,7 +132,7 @@ void print_message(unsigned long s_address, byte function, char message[MSGLENGT
   if (s_address > 1949000 && s_address < 1955000) {
     String strMessage = "";
     for (int i = 0; i < MSGLENGTH; i++)  {
-      if (message[i] > 31 && message[i] < 127) {
+      if (message[i] > 31 && message[i] < 128) {
         switch (message[i]) {
           case '|':
             strMessage += "ö";
@@ -161,6 +161,9 @@ void print_message(unsigned long s_address, byte function, char message[MSGLENGT
           case '\r':
             strMessage += "[0D]";
             break;
+          case 127:
+            strMessage += "[EOT]";
+            break;            
           default:
             strMessage += message[i];
         }

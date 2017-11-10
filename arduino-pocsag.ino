@@ -280,6 +280,7 @@ void decode_wordbuffer() {
           bcounter++;
           if (bcounter >= 7) {
             if (character == 4) {
+              message[ccounter] = 127;
               eot = true;
             }
             bcounter = 0;
