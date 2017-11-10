@@ -222,7 +222,7 @@ void decode_wordbuffer() {
     if (wordbuffer[i] == 0) continue;
     if (UserConfig.debugLevel > 0) {
       if (UserConfig.debugLevel == 2 || (UserConfig.debugLevel == 1 && i < 2))
-        Serial.print("\r\nwordbuffer[" + String(i) + "] = " + String(wordbuffer[i]) + ";");
+        Serial.print("\r\ncw[" + String(i) + "] = " + String(wordbuffer[i]) + ";");
     }
 
     used_cw_counter++;
@@ -231,7 +231,7 @@ void decode_wordbuffer() {
 
     if (UserConfig.enable_paritycheck) {
       if (parity(wordbuffer[i]) == 1) {
-        if (UserConfig.debugLevel == 2) Serial.println("cw[" + String(i) + "] = " + String(wordbuffer[i]) + "; PE");
+        if (UserConfig.debugLevel == 2) Serial.print("// PE");
         continue;
       }
     }
