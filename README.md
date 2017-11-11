@@ -5,6 +5,11 @@ Tested successfully with up to 1200 baud POCSAG.
 
 Designed for Arduino Mega2560 and optional DS3231 RTC
 
+![top](Images/top.jpg)
+![supplemental_board](Images/supplemental_board.jpg)
+
+
+
 | pin | used for |
 |----------|-------------|
 | 19 | Input from RF Receiver Board |
