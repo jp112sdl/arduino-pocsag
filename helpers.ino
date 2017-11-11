@@ -80,6 +80,19 @@ void disable_fsaled()
 {
   CLR(PORTB, fsaledPin - 6);
 }
+
+void enable_cwerrled()
+{
+  SET(PORTB, cwerrledPin - 6);
+  cwerrled_on = millis();
+}
+
+void disable_cwerrled()
+{
+  CLR(PORTB, cwerrledPin - 6);
+  cwerrled_on = 0;
+}
+
 unsigned long extract_address(int idx) {
   unsigned long address = 0;
   int pos = idx / 2;
@@ -178,12 +191,19 @@ void print_message(unsigned long s_address, byte function, char message[MSGLENGT
 void init_led() {
   for (int i = 0; i < 5; i++) {
     enable_pmbled();
+    enable_syncled();
+    enable_cwerrled();
+    enable_fsaled();
     delay(100);
     disable_pmbled();
+    disable_syncled();
+    disable_cwerrled();
+    disable_fsaled();
     delay(100);
   }
   disable_pmbled();
   disable_syncled();
+  disable_cwerrled();
   disable_fsaled();
 }
 

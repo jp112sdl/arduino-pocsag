@@ -41,8 +41,20 @@ void process_serial_input() {
       Serial.println(strRTCDateTime());
       return;
     }
-    if (strstr(serialbuffer, "h") || strstr(serialbuffer, "?"))
-      Serial.println(F("******** help config ********\r\nu0/1      = Umlaut-Replace dis-/enabled\r\nc0/1      = Real Time Clock dis-/enabled\r\np0/1      = Parity Check dis-/enabled\r\nd0/1/2    = Debug Level\r\ne0/1/2/3  = ECC (0) disabled, (1) 1 Bit, (2) 2 Bit, (3) >2 Bit\r\nl0/1      = LEDs dis-/enabled\r\ni0/1      = Input normal/inverted\r\nftnnn     = Field Strength Alarm (nnn minutes; 0 = off)\r\nmenn     = max. allowed codewords with errors\r\ntime      = time dd.mm.yyyy hh:mm:ss"));
+    if (strstr(serialbuffer, "h") || strstr(serialbuffer, "?")) {
+      char chunkUnit[1001];
+      chunkUnit[1000] = '\0';
+      size_t remaining_size = sizeof(help_message_text);
+      PGM_P buf = help_message_text;
+      while (buf != NULL && remaining_size > 0) {
+        size_t chunkUnitLen = 1000;
+        if (remaining_size < 1000) chunkUnitLen = remaining_size;
+        memcpy_P((void*)chunkUnit, (PGM_VOID_P)buf, chunkUnitLen);
+        buf += chunkUnitLen;
+        remaining_size -= chunkUnitLen;
+        Serial.write((const char*)chunkUnit, chunkUnitLen);
+      }
+    }
 
     if (serialbuffer[0] == 'p')
       UserConfig.enable_paritycheck = getIntFromString(serialbuffer, 1);

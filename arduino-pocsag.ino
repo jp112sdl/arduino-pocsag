@@ -21,11 +21,15 @@
 #include <Wire.h>
 #include <avr/eeprom.h>
 #include <avr/wdt.h>
+#include <avr/pgmspace.h>
+#include "help_message.h"
+
 #define RTC_I2C_ADDRESS 0x68
-#define receiverPin                   	19
-#define pmbledPin         	             8
-#define syncledPin                       9
-#define fsaledPin                       10
+#define receiverPin                   	19 // Input from Receiver Board
+#define pmbledPin         	             8 // LED if Preamble is detected
+#define syncledPin                       9 // LED if Sync Word is detected
+#define cwerrledPin                     10 // LED if there were too many codewords with errors
+#define fsaledPin                       11 // LED for field strength alarm
 #define bitPeriod                      833
 #define halfBitPeriod                  416
 #define halfBitPeriodTolerance          30
@@ -55,6 +59,7 @@ byte cw[32];
 unsigned int bch[1025], ecs[25];
 unsigned long last_pmb_millis = 0;
 bool field_strength_alarm = false;
+unsigned long cwerrled_on = 0;
 
 struct userconfig_t {
   byte debugLevel = 0;
@@ -70,6 +75,7 @@ struct userconfig_t {
   uint32_t toRIC = 0;
 } UserConfig;
 
+
 //RTC Variablen
 int jahr, monat, tag, stunde, minute, sekunde, wochentag;
 int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -82,6 +88,7 @@ void setup()
   pinMode(receiverPin, INPUT);
   pinMode(pmbledPin, OUTPUT);
   pinMode(syncledPin, OUTPUT);
+  pinMode(cwerrledPin, OUTPUT);
   pinMode(fsaledPin, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
@@ -94,7 +101,7 @@ void setup()
   eeprom_read_userconfig();
 
   if (UserConfig.enable_rtc) Wire.begin();
-  
+
   print_config();
   start_flank();
   Timer1.initialize(bitPeriod);
@@ -187,6 +194,10 @@ void loop() {
     }
   }
 
+  if (millis() - cwerrled_on > 2000)
+    disable_cwerrled();
+
+
   if (Serial.available()) {
     delay(100);
     while (Serial.available()) {
@@ -232,6 +243,7 @@ void decode_wordbuffer() {
     if (UserConfig.enable_paritycheck) {
       if (parity(wordbuffer[i]) == 1) {
         if (UserConfig.debugLevel == 2) Serial.print("// PE");
+        if (UserConfig.enable_led) enable_cwerrled();
         continue;
       }
     }
@@ -246,6 +258,7 @@ void decode_wordbuffer() {
       if (ecdcount == 3) decode_errorcount++;
 
       if (decode_errorcount >= UserConfig.max_allowd_cw_errors) {
+        if (UserConfig.enable_led) enable_cwerrled();
         if (UserConfig.debugLevel == 2)
           Serial.print("\r\ndecode_wordbuffer process cancelled! too much errors. errorcount > " + String(UserConfig.max_allowd_cw_errors));
         break;
