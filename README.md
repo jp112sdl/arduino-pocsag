@@ -7,8 +7,13 @@ Designed for Arduino Mega2560 and optional DS3231 RTC
 
 ![top](Images/top.jpg)
 ![supplemental_board](Images/supplemental_board.jpg)
+<br><br><br>
+**Sample output:**<br>
+<img src="Images/decoder_test.png" width="400">
 
+<br>
 
+**Wiring:**
 
 | pin | used for |
 |----------|-------------|
@@ -21,7 +26,7 @@ Designed for Arduino Mega2560 and optional DS3231 RTC
 | 11 | LED for field strength alarm |
 
 
-### To receive decoded messages, connect it to a terminal with 115200 baud.
+**To receive decoded messages, connect it to a terminal with 115200 baud.**
 
 
 To show configuration help, type "sh" in a serial terminal (115200 baud).
