@@ -21,6 +21,7 @@ Designed for Arduino Mega2560 and optional DS3231 RTC
 | 11 | LED for field strength alarm |
 
 
+### To receive decoded messages, connect it to a terminal with 115200 baud.
 
 
 To show configuration help, type "sh" in a serial terminal (115200 baud).
@@ -49,7 +50,6 @@ To show configuration help, type "sh" in a serial terminal (115200 baud).
 | rics x - y | RIC-Filter. Message output only from RIC x to RIC y; set both to 0 to disable filter |
 | time dd.mm.yyyy hh:mm:ss | set time |
 | time | prints current rtc time |
-
 
 <br><br>**Debug output:**<br>
 `cw[0] = 2181040895; // (1) * `<br>
