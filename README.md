@@ -12,7 +12,8 @@ Designed for Arduino Mega2560 and optional DS3231 RTC
 | 21 | DS3231 SCL |
 | 8 | LED Preamble detected |
 | 9 | LED SYNC word detected |
-| 10 | LED for field strength alarm |
+| 10 | LED for codeword errors|
+| 11 | LED for field strength alarm |
 
 
 
