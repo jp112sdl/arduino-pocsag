@@ -47,7 +47,7 @@
 #define MAXNUMBATCHES		             14
 
 static const char *functions[4] = {"A", "B", "C", "D"};
-
+enum {OFF, ON};
 volatile unsigned long buffer = 0;
 volatile int bitcounter = 0;
 int state = 0;
@@ -85,18 +85,11 @@ byte serialbuffer_counter = 0;
 
 void setup()
 {
-  pinMode(receiverPin, INPUT);
-  pinMode(pmbledPin, OUTPUT);
-  pinMode(syncledPin, OUTPUT);
-  pinMode(cwerrledPin, OUTPUT);
-  pinMode(fsaledPin, OUTPUT);
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, LOW);
-
   Serial.begin(115200);
   Serial.println();
-
   Serial.println("START POCSAG DECODER");
+
+  init_gpio();
 
   eeprom_read_userconfig();
 
@@ -113,10 +106,10 @@ void loop() {
     case STATE_WAIT_FOR_PRMB:
       if (buffer == prmbWord) {
         state = STATE_WAIT_FOR_SYNC;
-        if (UserConfig.enable_led) enable_pmbled();
+        set_pmbled(ON);
         if (UserConfig.fsa_timeout_minutes > 0) {
           last_pmb_millis = millis();
-          if (UserConfig.enable_led && field_strength_alarm) disable_fsaled();
+          if (UserConfig.enable_led && field_strength_alarm) set_fsaled(OFF);
           field_strength_alarm = false;
         }
       }
@@ -124,7 +117,7 @@ void loop() {
 
     case STATE_WAIT_FOR_SYNC:
       if (buffer == syncWord) {
-        if (UserConfig.enable_led) enable_syncled();
+        set_syncled(ON);
         bitcounter = 0;
         state = STATE_PROCESS_BATCH;
       } else {
@@ -132,14 +125,14 @@ void loop() {
           bitcounter = 0;
           if (batchcounter > 0) {
             if (state != STATE_PROCESS_MESSAGE) {
-              if (UserConfig.enable_led) disable_syncled();
-              if (UserConfig.enable_led) disable_pmbled();
+              set_syncled(OFF);
+              set_pmbled(OFF);
             }
             state = STATE_PROCESS_MESSAGE;
           } else {
             state = STATE_WAIT_FOR_PRMB;
-            if (UserConfig.enable_led) disable_syncled();
-            if (UserConfig.enable_led) disable_pmbled();
+            set_syncled(OFF);
+            set_pmbled(OFF);
           }
           batchcounter = 0;
         }
@@ -178,8 +171,8 @@ void loop() {
 
       memset(wordbuffer, 0, sizeof(wordbuffer));
       state = STATE_WAIT_FOR_PRMB;
-      if (UserConfig.enable_led) disable_syncled();
-      if (UserConfig.enable_led) disable_pmbled();
+      set_syncled(OFF);
+      set_pmbled(OFF);
       start_flank();
       break;
   }
@@ -190,12 +183,12 @@ void loop() {
     if (!field_strength_alarm && (last_pmb_millis == 0 || millis() - last_pmb_millis > UserConfig.fsa_timeout_minutes * 60000)) {
       Serial.println("\r\n=== [" + strRTCDateTime() + "] +++ Field Strength Alarm! +++");
       field_strength_alarm = true;
-      if (UserConfig.enable_led) enable_fsaled();
+      set_fsaled(ON);
     }
   }
 
   if (millis() - cwerrled_on > 2000)
-    disable_cwerrled();
+    set_cwerrled(OFF);
 
 
   if (Serial.available()) {
@@ -243,7 +236,7 @@ void decode_wordbuffer() {
     if (UserConfig.enable_paritycheck) {
       if (parity(wordbuffer[i]) == 1) {
         if (UserConfig.debugLevel == 2) Serial.print("// PE");
-        if (UserConfig.enable_led) enable_cwerrled();
+        set_cwerrled(ON);
         continue;
       }
     }
@@ -258,7 +251,7 @@ void decode_wordbuffer() {
       if (ecdcount == 3) decode_errorcount++;
 
       if (decode_errorcount >= UserConfig.max_allowd_cw_errors) {
-        if (UserConfig.enable_led) enable_cwerrled();
+        set_cwerrled(ON);
         if (UserConfig.debugLevel == 2)
           Serial.print("\r\ndecode_wordbuffer process cancelled! too much errors. errorcount > " + String(UserConfig.max_allowd_cw_errors));
         break;

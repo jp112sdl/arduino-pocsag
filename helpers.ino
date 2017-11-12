@@ -18,8 +18,7 @@
 
 #define CLR(x,y) (x&=(~(1<<y)))
 #define SET(x,y) (x|=(1<<y))
-String long2str(unsigned long binstr)
-{
+String long2str(unsigned long binstr) {
   String cwrep;
   int zeros = 32 - String(binstr, BIN).length();
   for (int i = 0; i < zeros; i++) {
@@ -29,8 +28,7 @@ String long2str(unsigned long binstr)
   return cwrep;
 }
 
-String byte2str(byte binstr)
-{
+String byte2str(byte binstr) {
   String cwrep;
   int zeros = 8 - String(binstr, BIN).length();
   for (int i = 0; i < zeros; i++)
@@ -41,8 +39,7 @@ String byte2str(byte binstr)
   return cwrep;
 }
 
-int parity (unsigned long x)  // Parity check. If ==1, codeword is invalid
-{
+int parity (unsigned long x)  { // Parity check. If ==1, codeword is invalid
   x = x ^ x >> 16;
   x = x ^ x >> 8;
   x = x ^ x >> 4;
@@ -51,46 +48,43 @@ int parity (unsigned long x)  // Parity check. If ==1, codeword is invalid
   return x & 1;
 }
 
-void enable_pmbled()
-{
-  SET(PORTH, pmbledPin - 3);
+void set_pmbled(bool state) {
+  if (UserConfig.enable_led) {
+    if (state == ON)
+      SET(PORTH, pmbledPin - 3);
+    else
+      CLR(PORTH, pmbledPin - 3);
+  }
 }
 
-void disable_pmbled()
-{
-  CLR(PORTH, pmbledPin - 3);
+void set_syncled(bool state) {
+  if (UserConfig.enable_led) {
+    if (state == ON)
+      SET(PORTH, syncledPin - 3);
+    else
+      CLR(PORTH, syncledPin - 3);
+  }
 }
 
-void enable_syncled()
-{
-  SET(PORTH, syncledPin - 3);
+void set_fsaled(bool state) {
+  if (UserConfig.enable_led) {
+    if (state == ON)
+      SET(PORTB, fsaledPin - 6);
+    else
+      CLR(PORTB, fsaledPin - 6);
+  }
 }
 
-void disable_syncled()
-{
-  CLR(PORTH, syncledPin - 3);
-}
-
-void enable_fsaled()
-{
-  SET(PORTB, fsaledPin - 6);
-}
-
-void disable_fsaled()
-{
-  CLR(PORTB, fsaledPin - 6);
-}
-
-void enable_cwerrled()
-{
-  SET(PORTB, cwerrledPin - 6);
-  cwerrled_on = millis();
-}
-
-void disable_cwerrled()
-{
-  CLR(PORTB, cwerrledPin - 6);
-  cwerrled_on = 0;
+void set_cwerrled(bool state) {
+  if (UserConfig.enable_led) {
+    if (state == ON) {
+      SET(PORTB, cwerrledPin - 6);
+      cwerrled_on = millis();
+    } else {
+      CLR(PORTB, cwerrledPin - 6);
+      cwerrled_on = 0;
+    }
+  }
 }
 
 unsigned long extract_address(int idx) {
@@ -190,21 +184,21 @@ void print_message(unsigned long s_address, byte function, char message[MSGLENGT
 
 void init_led() {
   for (int i = 0; i < 5; i++) {
-    enable_pmbled();
-    enable_syncled();
-    enable_cwerrled();
-    enable_fsaled();
+    set_pmbled(ON);
+    set_syncled(ON);
+    set_cwerrled(ON);
+    set_fsaled(ON);
     delay(100);
-    disable_pmbled();
-    disable_syncled();
-    disable_cwerrled();
-    disable_fsaled();
+    set_pmbled(OFF);
+    set_syncled(OFF);
+    set_cwerrled(OFF);
+    set_fsaled(OFF);
     delay(100);
   }
-  disable_pmbled();
-  disable_syncled();
-  disable_cwerrled();
-  disable_fsaled();
+  set_pmbled(OFF);
+  set_syncled(OFF);
+  set_cwerrled(OFF);
+  set_fsaled(OFF);
 }
 
 void softRestart() {
@@ -213,3 +207,12 @@ void softRestart() {
   wdt_reset();
 }
 
+void init_gpio() {
+  pinMode(receiverPin, INPUT);
+  pinMode(pmbledPin, OUTPUT);
+  pinMode(syncledPin, OUTPUT);
+  pinMode(cwerrledPin, OUTPUT);
+  pinMode(fsaledPin, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+}
