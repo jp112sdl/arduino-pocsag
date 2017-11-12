@@ -29,7 +29,7 @@ Designed for Arduino Mega2560 and optional DS3231 RTC
 **To receive decoded messages, connect it to a terminal with 115200 baud.**
 
 
-To show configuration help, type "sh" in a serial terminal (115200 baud).
+To show configuration help, type "h" in a serial terminal:
 
 | command | used for |
 |----------|-------------|
