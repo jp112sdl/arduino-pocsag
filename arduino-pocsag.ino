@@ -197,7 +197,7 @@ void loop() {
       char inChr = Serial.read();
       serialbuffer[serialbuffer_counter] = inChr;
       Serial.print(serialbuffer[serialbuffer_counter]);
-      if (inChr == '\n') {
+      if (inChr == '\r' || inChr == '\n') {
         process_serial_input();
         memset(serialbuffer, 0, sizeof(serialbuffer));
         serialbuffer_counter = 0;

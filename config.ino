@@ -1,21 +1,21 @@
 void print_config() {
-  String strpcheck =  ((UserConfig.enable_paritycheck == true) ?        F("Parity Check           ON")                                               :         F("Parity Check           OFF"));
-  String struml    =  ((UserConfig.enable_umlautreplace == true) ?      F("Umlaut-Replace         ON")                                               :         F("Umlaut-Replace         OFF"));
-  String strrtc    =  ((UserConfig.enable_rtc         == true) ? String(F("Real Time Clock        ON (")) + strRTCDateTime() + F(")")                 : String(F("Real Time Clock        OFF")));
-  String strecc =                                                       F("ECC-Mode               OFF");
-  if (UserConfig.ecc_mode == 1) strecc =                                F("ECC-Mode               1 bit");
-  if (UserConfig.ecc_mode == 2) strecc =                                F("ECC-Mode               2 bit");
-  if (UserConfig.ecc_mode == 3) strecc =                                F("ECC-Mode               >2 bit");
-  String strmax_allowd_cw_errors =                               String(F("Max. # of CW w/ Errors ")) + String(UserConfig.max_allowd_cw_errors);
-  String strled =  ((UserConfig.enable_led == true) ?                   F("LED                    ON")                                               :        F("LED                    OFF"));
-  String strfsa =  ((UserConfig.fsa_timeout_minutes > 0) ?       String(F("Field Strength Alarm   ON (")) + String(UserConfig.fsa_timeout_minutes) + " min.)"   : String(F("Field Strength Alarm   OFF")));
-  String strdebug =                                                     F("Debug Level            OFF (0)");
-  if (UserConfig.debugLevel == 1) strdebug =                            F("Debug Level            CW 0+1 ");
-  if (UserConfig.debugLevel == 2) strdebug =                            F("Debug Level            ALL (2)");
-  String strinvert =  ((UserConfig.invert_signal == FALLING) ?          F("Input Level            NORMAL")                                           :        F("Input Level            INV."));
-  String strricfilter = ((UserConfig.fromRIC != 0 && UserConfig.toRIC != 0) ? String(F("RIC-Filter             ")) + String(UserConfig.fromRIC) + " - " + String(UserConfig.toRIC) : String(F("RIC-Filter             OFF")));
+  String strpcheck =  ((UserConfig.enable_paritycheck == true) ?                     F("Parity Check            ON")                                               :                 F("Parity Check            OFF"));
+  String struml    =  ((UserConfig.enable_umlautreplace == true) ?                   F("Umlaut-Replace          ON")                                               :                 F("Umlaut-Replace          OFF"));
+  String strrtc    =  ((UserConfig.enable_rtc         == true) ?              String(F("Real Time Clock         ON (")) + strRTCDateTime() + F(")")                 :         String(F("Real Time Clock         OFF")));
+  String strecc =                                                                    F("ECC-Mode                OFF");
+  if (UserConfig.ecc_mode == 1) strecc =                                             F("ECC-Mode                1 bit");
+  if (UserConfig.ecc_mode == 2) strecc =                                             F("ECC-Mode                2 bit");
+  if (UserConfig.ecc_mode == 3) strecc =                                             F("ECC-Mode                >2 bit");
+  String strmax_allowd_cw_errors =                                            String(F("Max. # of CW w/ Errors  ")) + String(UserConfig.max_allowd_cw_errors);
+  String strled =  ((UserConfig.enable_led == true) ?                                F("LED                     ON")                                               :                 F("LED                     OFF"));
+  String strfsa =  ((UserConfig.fsa_timeout_minutes > 0) ?                    String(F("Field Strength Alarm    ON (")) + String(UserConfig.fsa_timeout_minutes) + " min.)" : String(F("Field Strength Alarm    OFF")));
+  String strdebug =                                                                  F("Debug Level             OFF (0)");
+  if (UserConfig.debugLevel == 1) strdebug =                                         F("Debug Level             CW 0+1 ");
+  if (UserConfig.debugLevel == 2) strdebug =                                         F("Debug Level             ALL (2)");
+  String strinvert =  ((UserConfig.invert_signal == FALLING) ?                       F("Input Level             NORMAL")                                           :                 F("Input Level             INV."));
+  String strricfilter = ((UserConfig.fromRIC != 0 && UserConfig.toRIC != 0) ? String(F("RIC-Filter              ")) + String(UserConfig.fromRIC) + " - " + String(UserConfig.toRIC) : String(F("RIC-Filter              OFF")));
 
-  Serial.println(String(F("******** current config ********\r\n")) + strpcheck + F("\r\n") + strdebug + F("\r\n") + strecc + F("\r\n") + strmax_allowd_cw_errors + F("\r\n") + strled + F("\r\n") + strinvert + F("\r\n") + strfsa + F("\r\n") + strrtc + F("\r\n") + struml + F("\r\n") + strricfilter);
+  Serial.println(String(F("################# CURRENT CONFIG ##################\r\n")) + strpcheck + F("\r\n") + strdebug + F("\r\n") + strecc + F("\r\n") + strmax_allowd_cw_errors + F("\r\n") + strled + F("\r\n") + strinvert + F("\r\n") + strfsa + F("\r\n") + strrtc + F("\r\n") + struml + F("\r\n") + strricfilter+"\r\n###################################################");
 }
 
 void process_serial_input() {
