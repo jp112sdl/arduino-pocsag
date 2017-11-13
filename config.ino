@@ -10,8 +10,8 @@ void print_config() {
   String strled =  ((UserConfig.enable_led == true) ?                                F("LED                     ON")                                               :                 F("LED                     OFF"));
   String strfsa =  ((UserConfig.fsa_timeout_minutes > 0) ?                    String(F("Field Strength Alarm    ON (")) + String(UserConfig.fsa_timeout_minutes) + " min.)" : String(F("Field Strength Alarm    OFF")));
   String strdebug =                                                                  F("Debug Level             OFF (0)");
-  if (UserConfig.debugLevel == 1) strdebug =                                         F("Debug Level             CW 0+1 ");
-  if (UserConfig.debugLevel == 2) strdebug =                                         F("Debug Level             ALL (2)");
+  if (UserConfig.DebugLevel == DL_LOW) strdebug =                                         F("Debug Level             SUMMARY (1) ");
+  if (UserConfig.DebugLevel == DL_MAX) strdebug =                                         F("Debug Level             ALL (2)");
   String strinvert =  ((UserConfig.invert_signal == FALLING) ?                       F("Input Level             NORMAL")                                           :                 F("Input Level             INV."));
   String strricfilter = ((UserConfig.fromRIC != 0 && UserConfig.toRIC != 0) ? String(F("RIC-Filter              ")) + String(UserConfig.fromRIC) + " - " + String(UserConfig.toRIC) : String(F("RIC-Filter              OFF")));
 
@@ -60,7 +60,7 @@ void process_serial_input() {
       UserConfig.enable_paritycheck = getIntFromString(serialbuffer, 1);
 
     if (serialbuffer[0] == 'd')
-      UserConfig.debugLevel = getIntFromString(serialbuffer, 1);
+      UserConfig.DebugLevel = getIntFromString(serialbuffer, 1);
 
     if (serialbuffer[0] == 'e')
       UserConfig.ecc_mode = getIntFromString(serialbuffer, 1);

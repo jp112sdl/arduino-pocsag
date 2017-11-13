@@ -48,6 +48,7 @@
 
 static const char *functions[4] = {"A", "B", "C", "D"};
 enum {OFF, ON};
+enum {DL_OFF, DL_LOW, DL_MAX};
 volatile unsigned long buffer = 0;
 volatile int bitcounter = 0;
 int state = 0;
@@ -62,7 +63,7 @@ bool field_strength_alarm = false;
 unsigned long cwerrled_on = 0;
 
 struct userconfig_t {
-  byte debugLevel = 0;
+  byte DebugLevel = 0;
   bool enable_paritycheck = false;
   byte ecc_mode = 0;
   bool enable_led = false;
@@ -224,10 +225,8 @@ void decode_wordbuffer() {
 
   for (int i = 0; i < ((MAXNUMBATCHES * 16) + 1); i++) {
     if (wordbuffer[i] == 0) continue;
-    if (UserConfig.debugLevel > 0) {
-      if (UserConfig.debugLevel == 2 || (UserConfig.debugLevel == 1 && i < 2))
-        Serial.print("\r\ncw[" + String(i) + "] = " + String(wordbuffer[i]) + ";");
-    }
+    if (UserConfig.DebugLevel == DL_MAX )
+      Serial.print("\r\ncw[" + String(i) + "] = " + String(wordbuffer[i]) + ";");
 
     used_cw_counter++;
 
@@ -235,7 +234,7 @@ void decode_wordbuffer() {
 
     if (UserConfig.enable_paritycheck) {
       if (parity(wordbuffer[i]) == 1) {
-        if (UserConfig.debugLevel == 2) Serial.print("// PE");
+        if (UserConfig.DebugLevel == DL_MAX) Serial.print("// PE");
         set_cwerrled(ON);
         continue;
       }
@@ -252,7 +251,7 @@ void decode_wordbuffer() {
 
       if (decode_errorcount >= UserConfig.max_allowd_cw_errors) {
         set_cwerrled(ON);
-        if (UserConfig.debugLevel == 2)
+        if (UserConfig.DebugLevel == DL_MAX)
           Serial.print("\r\ndecode_wordbuffer process cancelled! too much errors. errorcount > " + String(UserConfig.max_allowd_cw_errors));
         break;
       }
@@ -261,7 +260,7 @@ void decode_wordbuffer() {
         for (int cw_bcounter = 0; cw_bcounter < 32; cw_bcounter++)
           bitWrite(wordbuffer[i], 31 - cw_bcounter, (int)cw[cw_bcounter]);
 
-      if (UserConfig.debugLevel > 1) {
+      if (UserConfig.DebugLevel == DL_MAX) {
         Serial.print(" // (" + String(ecdcount) + ") ");
         if (preEccWb != wordbuffer[i])
           Serial.print("*");
@@ -271,7 +270,7 @@ void decode_wordbuffer() {
     if (bitRead(wordbuffer[i], 31) == 0) {
       if  ((i > 0 || address_counter == 0) && (parity(wordbuffer[i]) != 1)) {
         address[address_counter] = extract_address(i);
-        if (UserConfig.debugLevel == 2) Serial.print(" //address " + String(address[address_counter]) + " found, address_counter = " + String(address_counter));
+        if (UserConfig.DebugLevel == DL_MAX) Serial.print(" //address " + String(address[address_counter]) + " found, address_counter = " + String(address_counter));
         function[address_counter] = extract_function(i);
         if (address_counter > 0) {
           print_message(address[address_counter - 1], function[address_counter - 1], message);
@@ -306,7 +305,7 @@ void decode_wordbuffer() {
 
   if (address_counter > 0) {
     print_message(address[address_counter - 1], function[address_counter - 1], message);
-    if (UserConfig.debugLevel == 2)  Serial.print("\r\naddress_counter = " + String(address_counter));
+    if (UserConfig.DebugLevel == DL_MAX)  Serial.print("\r\naddress_counter = " + String(address_counter));
   }
-  Serial.print("\r\n=== [" + strRTCDateTime() + "] CW(" + String(used_cw_counter) + ") " + String(millis() - start_millis) + "ms ===");
+  if (UserConfig.DebugLevel == DL_LOW) Serial.print("\r\n=== [" + strRTCDateTime() + "] CW(" + String(used_cw_counter) + ") " + String(millis() - start_millis) + "ms ===");
 }
