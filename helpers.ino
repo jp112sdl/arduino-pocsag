@@ -178,6 +178,10 @@ void print_message(unsigned long s_address, byte function, char message[MSGLENGT
         } else strMessage += message[i];
       }
     }
+    //Wenn idle-Wort um 1 Bit verschoben
+    strMessage.replace("/GWHc+dqrx9<E^\"","");
+    strMessage.replace("/GWHc+dqrx9<E","");
+
     Serial.print("\r\n" + String(s_address) + ";" + functions[function] + ";" + strMessage);
   }
 }
