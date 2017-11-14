@@ -36,8 +36,8 @@ To show configuration help, type "h" in a serial terminal:
 | c0 | Real Time Clock disabled / not installed |
 | c1 | Real Time Clock enabled |
 | d0 | Debug Output OFF |
-| d1 | Debug Output CodeWords 1+2|
-| d2 | Debug Output All Codewords|
+| d1 | Debug Output LOW (show statistic summary after decoding) |
+| d2 | Debug Output MAX (prints all received codewords) |
 | e0 | Error Correction disabled |
 | e1 | Error Correction 1 Bit Errors |
 | e2 | Error Correction 2 Bit Errors |
@@ -56,13 +56,12 @@ To show configuration help, type "h" in a serial terminal:
 | time dd.mm.yyyy hh:mm:ss | set time |
 | time | prints current rtc time |
 
-<br><br>**Debug output:**<br>
+<br><br>**Debug output d2 (MAX) :**<br>
 `cw[0] = 2181040895; // (1) * `<br>
 - codeword 1 (zero based index!) has the value `10000010000000000000101011111111` (decimal converted 2181040895) with 1 bit error.
 - an asterisk shows, that an detected error was corrected. if there is no asterisk, the (not corrected) bit error was in the redundancy part of the codeword
 - `//PE` = Parity Error detected in codeword (if parity check `p1` is enabled)
 
-<br>
-Each decoding ends with the following line (statistic information):<br>
+<br><br>**Debug output d1 (LOW) :**<br>
 === [00.00.0000 00:00:00] CW(16) 37ms ===<br>
 - at time (in brackets), 16 codewords were decoded which took 37 milliseconds.
