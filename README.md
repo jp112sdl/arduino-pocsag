@@ -9,7 +9,7 @@ Designed for Arduino Mega2560 and optional DS3231 RTC
 ![supplemental_board](Images/supplemental_board.jpg)
 <br><br><br>
 **Sample output:**<br>
-<img src="Images/decoder_test.png" width="400">
+<img src="Images/decoder_test.png" width="600">
 
 <br>
 
