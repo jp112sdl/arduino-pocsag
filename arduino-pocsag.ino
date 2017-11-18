@@ -44,7 +44,7 @@
 
 #define MSGLENGTH 	                240
 #define BITCOUNTERLENGTH	          440
-#define MAXNUMBATCHES		             14
+#define MAXNUMBATCHES		             32
 
 static const char *functions[4] = {"A", "B", "C", "D"};
 enum {OFF, ON};
