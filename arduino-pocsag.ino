@@ -43,8 +43,8 @@
 #define STATE_PROCESS_MESSAGE 	3
 
 #define MSGLENGTH 	                240
-#define BITCOUNTERLENGTH	          440
-#define MAXNUMBATCHES		             32
+#define BITCOUNTERLENGTH	        440
+#define MAXNUMBATCHES		         32 
 
 static const char *functions[4] = {"A", "B", "C", "D"};
 enum {OFF, ON};
@@ -249,7 +249,7 @@ void decode_wordbuffer() {
 
       if (ecdcount == 3) decode_errorcount++;
 
-      if (decode_errorcount >= UserConfig.max_allowd_cw_errors) {
+      if (decode_errorcount > UserConfig.max_allowd_cw_errors) {
         set_cwerrled(ON);
         if (UserConfig.DebugLevel == DL_MAX)
           Serial.print("\r\ndecode_wordbuffer process cancelled! too much errors. errorcount > " + String(UserConfig.max_allowd_cw_errors));
@@ -307,5 +307,5 @@ void decode_wordbuffer() {
     print_message(address[address_counter - 1], function[address_counter - 1], message);
     if (UserConfig.DebugLevel == DL_MAX)  Serial.print("\r\naddress_counter = " + String(address_counter));
   }
-  if (UserConfig.DebugLevel == DL_LOW) Serial.print("\r\n=== [" + strRTCDateTime() + "] CW(" + String(used_cw_counter) + ") " + String(millis() - start_millis) + "ms ===");
+  if (UserConfig.DebugLevel == DL_LOW) Serial.print("\r\n=== [" + strRTCDateTime() + "] CW(" + String(used_cw_counter) + ") E("+String(decode_errorcount)+") " + String(millis() - start_millis) + "ms ===");
 }
