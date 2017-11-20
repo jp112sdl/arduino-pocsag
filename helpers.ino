@@ -179,9 +179,12 @@ void print_message(unsigned long s_address, byte function, char message[MSGLENGT
       }
     }
     //Wenn idle-Wort um 1 Bit verschoben
-    strMessage.replace("/GWHc+dqrx9<E^\"","");
-    strMessage.replace("/GWHc+dqrx9<E","");
+    strMessage.replace("/GWHc+dqrx9<E^\"", "");
+    strMessage.replace("/GWHc+dqrx9<E", "");
 
+    if (decode_errorcount > UserConfig.max_allowd_cw_errors) {
+      strMessage += "[ERR]";
+    }
     Serial.print("\r\n" + String(s_address) + ";" + functions[function] + ";" + strMessage);
   }
 }

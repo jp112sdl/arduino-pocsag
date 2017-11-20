@@ -42,9 +42,9 @@
 #define STATE_PROCESS_BATCH 	  2
 #define STATE_PROCESS_MESSAGE 	3
 
-#define MSGLENGTH 	                240
-#define BITCOUNTERLENGTH	        440
-#define MAXNUMBATCHES		         32 
+#define MSGLENGTH 	                244
+#define BITCOUNTERLENGTH	          440
+#define MAXNUMBATCHES		             32
 
 static const char *functions[4] = {"A", "B", "C", "D"};
 enum {OFF, ON};
@@ -61,6 +61,7 @@ unsigned int bch[1025], ecs[25];
 unsigned long last_pmb_millis = 0;
 bool field_strength_alarm = false;
 unsigned long cwerrled_on = 0;
+byte decode_errorcount = 0;
 
 struct userconfig_t {
   byte DebugLevel = 0;
@@ -221,7 +222,6 @@ void decode_wordbuffer() {
   int used_cw_counter = 0;
   boolean eot = false;
   unsigned long start_millis = millis();
-  byte decode_errorcount = 0;
 
   for (int i = 0; i < ((MAXNUMBATCHES * 16) + 1); i++) {
     if (wordbuffer[i] == 0) continue;
@@ -307,5 +307,6 @@ void decode_wordbuffer() {
     print_message(address[address_counter - 1], function[address_counter - 1], message);
     if (UserConfig.DebugLevel == DL_MAX)  Serial.print("\r\naddress_counter = " + String(address_counter));
   }
-  if (UserConfig.DebugLevel == DL_LOW) Serial.print("\r\n=== [" + strRTCDateTime() + "] CW(" + String(used_cw_counter) + ") E("+String(decode_errorcount)+") " + String(millis() - start_millis) + "ms ===");
+  if (UserConfig.DebugLevel == DL_LOW) Serial.print("\r\n=== [" + strRTCDateTime() + "] CW(" + String(used_cw_counter) + ") E(" + String(decode_errorcount) + ") " + String(millis() - start_millis) + "ms ===");
+  decode_errorcount = 0;
 }
