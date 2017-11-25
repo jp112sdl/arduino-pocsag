@@ -70,6 +70,7 @@ struct userconfig_t {
   bool enable_led = false;
   bool enable_rtc = false;
   bool enable_umlautreplace = true;
+  bool enable_emptymsg = true;
   byte invert_signal = RISING;
   byte fsa_timeout_minutes = 10;
   byte max_allowd_cw_errors = 8;

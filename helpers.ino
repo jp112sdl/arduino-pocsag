@@ -178,14 +178,15 @@ void print_message(unsigned long s_address, byte function, char message[MSGLENGT
         } else strMessage += message[i];
       }
     }
-    //Wenn idle-Wort um 1 Bit verschoben
+    //Wenn idle-Wort um 1 Bit 'verschoben'
     strMessage.replace("/GWHc+dqrx9<E^\"", "");
     strMessage.replace("/GWHc+dqrx9<E", "");
 
-    if (decode_errorcount > UserConfig.max_allowd_cw_errors) {
+    if (decode_errorcount > UserConfig.max_allowd_cw_errors) 
       strMessage += "[ERR]";
-    }
-    Serial.print("\r\n" + String(s_address) + ";" + functions[function] + ";" + strMessage);
+    
+    if (!(!UserConfig.enable_emptymsg && strMessage.length() == 0))
+      Serial.print("\r\n" + String(s_address) + ";" + functions[function] + ";" + strMessage);
   }
 }
 

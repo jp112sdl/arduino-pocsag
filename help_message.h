@@ -9,6 +9,7 @@ const char help_message_text[] PROGMEM = R"=====(
 # l 0/1                     = dis-/enable LEDs                                                                    #
 # c 0/1                     = dis-/enable Real Time Clock                                                         #
 # u 0/1                     = dis-/enable Umlaut-Replace                                                          #
+# o 0/1                     = dis-/enable Output of Empty Messages (when only RIC & Func were decoded)            #
 # time dd.mm.yyyy hh:mm:ss  = set rtc time to dd.mm.yyyy hh:mm:ss ('time' w/o parameters prints current rtc time) #
 # rics <a> <b>              = RIC Filter - output only from RIC <a> to RIC <b> (disable by setting a & b to 0)    #
 ###################################################################################################################

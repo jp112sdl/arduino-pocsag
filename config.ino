@@ -1,5 +1,6 @@
 void print_config() {
   String strpcheck =  ((UserConfig.enable_paritycheck == true) ?                     F("Parity Check            ON")                                               :                 F("Parity Check            OFF"));
+  String stremptymsg =  ((UserConfig.enable_emptymsg == true) ?                      F("Output Empty Messages   ON")                                               :                 F("Output Empty Messages   OFF"));
   String struml    =  ((UserConfig.enable_umlautreplace == true) ?                   F("Umlaut-Replace          ON")                                               :                 F("Umlaut-Replace          OFF"));
   String strrtc    =  ((UserConfig.enable_rtc         == true) ?              String(F("Real Time Clock         ON (")) + strRTCDateTime() + F(")")                 :         String(F("Real Time Clock         OFF")));
   String strecc =                                                                    F("ECC-Mode                OFF");
@@ -10,12 +11,12 @@ void print_config() {
   String strled =  ((UserConfig.enable_led == true) ?                                F("LED                     ON")                                               :                 F("LED                     OFF"));
   String strfsa =  ((UserConfig.fsa_timeout_minutes > 0) ?                    String(F("Field Strength Alarm    ON (")) + String(UserConfig.fsa_timeout_minutes) + " min.)" : String(F("Field Strength Alarm    OFF")));
   String strdebug =                                                                  F("Debug Level             OFF (0)");
-  if (UserConfig.DebugLevel == DL_LOW) strdebug =                                         F("Debug Level             SUMMARY (1) ");
-  if (UserConfig.DebugLevel == DL_MAX) strdebug =                                         F("Debug Level             ALL (2)");
+  if (UserConfig.DebugLevel == DL_LOW) strdebug =                                    F("Debug Level             SUMMARY (1) ");
+  if (UserConfig.DebugLevel == DL_MAX) strdebug =                                    F("Debug Level             ALL (2)");
   String strinvert =  ((UserConfig.invert_signal == FALLING) ?                       F("Input Level             NORMAL")                                           :                 F("Input Level             INV."));
   String strricfilter = ((UserConfig.fromRIC != 0 && UserConfig.toRIC != 0) ? String(F("RIC-Filter              ")) + String(UserConfig.fromRIC) + " - " + String(UserConfig.toRIC) : String(F("RIC-Filter              OFF")));
 
-  Serial.println(String(F("################# CURRENT CONFIG ##################\r\n")) + strpcheck + F("\r\n") + strdebug + F("\r\n") + strecc + F("\r\n") + strmax_allowd_cw_errors + F("\r\n") + strled + F("\r\n") + strinvert + F("\r\n") + strfsa + F("\r\n") + strrtc + F("\r\n") + struml + F("\r\n") + strricfilter+"\r\n###################################################");
+  Serial.println(String(F("################# CURRENT CONFIG ##################\r\n")) + strpcheck + F("\r\n") + strdebug + F("\r\n") + strecc + F("\r\n") + strmax_allowd_cw_errors + F("\r\n") + strled + F("\r\n") + strinvert + F("\r\n") + strfsa + F("\r\n") + strrtc + F("\r\n") + struml + F("\r\n") + stremptymsg + F("\r\n") + strricfilter + "\r\n###################################################");
 }
 
 void process_serial_input() {
@@ -58,6 +59,9 @@ void process_serial_input() {
 
     if (serialbuffer[0] == 'p')
       UserConfig.enable_paritycheck = getIntFromString(serialbuffer, 1);
+
+    if (serialbuffer[0] == 'o')
+      UserConfig.enable_emptymsg = getIntFromString(serialbuffer, 1);
 
     if (serialbuffer[0] == 'd')
       UserConfig.DebugLevel = getIntFromString(serialbuffer, 1);
