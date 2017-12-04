@@ -33,25 +33,6 @@ byte bcdToDec(byte val) {
   return ( (val / 16 * 10) + (val % 16) );
 }
 
-uint32_t getIntFromString (char *stringWithInt, byte num) {
-  char *tail;
-  while (num > 0) {
-    num--;
-    while ((!isdigit (*stringWithInt)) && (*stringWithInt != 0)) {
-      stringWithInt++;
-    }
-    tail = stringWithInt;
-    while ((isdigit(*tail)) && (*tail != 0)) {
-      tail++;
-    }
-
-    if (num > 0) {
-      stringWithInt = tail;
-    }
-  }
-  return (strtol(stringWithInt, &tail, 10));
-}
-
 String strRTCDateTime() {
   if (UserConfig.enable_rtc) {
     rtcReadTime();

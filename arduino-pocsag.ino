@@ -78,7 +78,6 @@ struct userconfig_t {
   uint32_t toRIC = 0;
 } UserConfig;
 
-
 //RTC Variablen
 int jahr, monat, tag, stunde, minute, sekunde, wochentag;
 int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -86,15 +85,14 @@ int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 char serialbuffer[30];
 byte serialbuffer_counter = 0;
 
-void setup()
-{
+void setup() {
   Serial.begin(115200);
   Serial.println();
   Serial.println("START POCSAG DECODER");
 
   init_gpio();
 
-  eeprom_read_userconfig();
+  init_eeprom();
 
   if (UserConfig.enable_rtc) Wire.begin();
 

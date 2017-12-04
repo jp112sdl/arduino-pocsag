@@ -135,6 +135,25 @@ void stop_flank() {
   detachInterrupt(4);
 }
 
+uint32_t getIntFromString (char *stringWithInt, byte num) {
+  char *tail;
+  while (num > 0) {
+    num--;
+    while ((!isdigit (*stringWithInt)) && (*stringWithInt != 0)) {
+      stringWithInt++;
+    }
+    tail = stringWithInt;
+    while ((isdigit(*tail)) && (*tail != 0)) {
+      tail++;
+    }
+
+    if (num > 0) {
+      stringWithInt = tail;
+    }
+  }
+  return (strtol(stringWithInt, &tail, 10));
+}
+
 void print_message(unsigned long s_address, byte function, char message[MSGLENGTH]) {
   if ((s_address > UserConfig.fromRIC && s_address < UserConfig.toRIC) || UserConfig.fromRIC == 0 || UserConfig.toRIC == 0 ) {
     String strMessage = "";
@@ -182,9 +201,9 @@ void print_message(unsigned long s_address, byte function, char message[MSGLENGT
     strMessage.replace("/GWHc+dqrx9<E^\"", "");
     strMessage.replace("/GWHc+dqrx9<E", "");
 
-    if (decode_errorcount > UserConfig.max_allowd_cw_errors) 
+    if (decode_errorcount > UserConfig.max_allowd_cw_errors)
       strMessage += "[ERR]";
-    
+
     if (!(!UserConfig.enable_emptymsg && strMessage.length() == 0))
       Serial.print("\r\n" + String(s_address) + ";" + functions[function] + ";" + strMessage);
   }
@@ -224,3 +243,4 @@ void init_gpio() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
 }
+

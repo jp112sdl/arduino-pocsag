@@ -119,3 +119,16 @@ void eeprom_read_userconfig() {
     if (field_strength_alarm) set_fsaled(ON);
   }
 }
+
+void init_eeprom() {
+  int eeprom_length = EEPROM.length();
+  int last_eeprom_addr = eeprom_length - 1;
+  byte last_eeprom_val = EEPROM.read(last_eeprom_addr);
+  if (last_eeprom_val != 43) {
+    Serial.print("Writing initial configuration to eeprom... ");
+    eeprom_write_block((const void*)&UserConfig, (void*)0, sizeof(UserConfig));
+    EEPROM.write(last_eeprom_addr, 43);
+    Serial.println("done");
+  }
+  eeprom_read_userconfig();
+}
