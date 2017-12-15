@@ -275,8 +275,8 @@ void decode_wordbuffer() {
         function[address_counter] = extract_function(i);
         if (address_counter > 0) {
           if (ccounter > 0) {
-            print_message(address[address_counter - 1], function[address_counter - 1], message);
-            for (int idx_wo_msg = 0; idx_wo_msg < address_idx_wo_msg_counter; idx_wo_msg++) print_message(address[address_idx_wo_msg[idx_wo_msg]], function[address_idx_wo_msg[idx_wo_msg]], message);
+            print_message(address[address_counter - 1], function[address_counter - 1], message, used_cw_counter);
+            for (int idx_wo_msg = 0; idx_wo_msg < address_idx_wo_msg_counter; idx_wo_msg++) print_message(address[address_idx_wo_msg[idx_wo_msg]], function[address_idx_wo_msg[idx_wo_msg]], message, used_cw_counter);
             address_idx_wo_msg_counter = 0;
           } else {
             address_idx_wo_msg[address_idx_wo_msg_counter] = address_counter - 1;
@@ -312,7 +312,7 @@ void decode_wordbuffer() {
   }
 
   if (address_counter > 0) {
-    print_message(address[address_counter - 1], function[address_counter - 1], message);
+    print_message(address[address_counter - 1], function[address_counter - 1], message, used_cw_counter);
     if (UserConfig.DebugLevel == DL_MAX)  Serial.print("\r\naddress_counter = " + String(address_counter));
   }
   if (UserConfig.DebugLevel > DL_OFF) Serial.print("\r\n=== [" + strRTCDateTime() + "] CW(" + String(used_cw_counter) + ") E(" + String(decode_errorcount) + ") " + String(millis() - start_millis) + "ms ===");

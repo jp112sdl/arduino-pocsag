@@ -75,8 +75,11 @@ void process_serial_input() {
     if (serialbuffer[0] == 'u')
       UserConfig.enable_umlautreplace = getIntFromString(serialbuffer, 1);
 
-    if (serialbuffer[0] == 'c')
+    if (serialbuffer[0] == 'c') {
       UserConfig.enable_rtc = getIntFromString(serialbuffer, 1);
+      eeprom_write_block((const void*)&UserConfig, (void*)0, sizeof(UserConfig));
+      softRestart();
+    }  
 
     if (serialbuffer[0] == 'i') {
       if (getIntFromString(serialbuffer, 1) == 0)

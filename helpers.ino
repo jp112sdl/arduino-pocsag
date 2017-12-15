@@ -154,7 +154,7 @@ uint32_t getIntFromString (char *stringWithInt, byte num) {
   return (strtol(stringWithInt, &tail, 10));
 }
 
-void print_message(unsigned long s_address, byte function, char message[MSGLENGTH]) {
+void print_message(unsigned long s_address, byte function, char message[MSGLENGTH], byte used_cw_counter) {
   if ((s_address > UserConfig.fromRIC && s_address < UserConfig.toRIC) || UserConfig.fromRIC == 0 || UserConfig.toRIC == 0 ) {
     String strMessage = "";
     for (int i = 0; i < MSGLENGTH; i++)  {
@@ -205,7 +205,7 @@ void print_message(unsigned long s_address, byte function, char message[MSGLENGT
       strMessage += "[ERR]";
 
     if (!(!UserConfig.enable_emptymsg && strMessage.length() == 0))
-      Serial.print("\r\n" + String(s_address) + ";" + functions[function] + ";" + strMessage);
+      Serial.print("\r\n" + String(s_address) + ";" + functions[function] + ";" + strMessage+"[CW"+String(used_cw_counter)+"]");
   }
 }
 
