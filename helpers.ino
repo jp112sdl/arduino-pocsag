@@ -204,8 +204,12 @@ void print_message(unsigned long s_address, byte function, char message[MSGLENGT
     if (decode_errorcount > UserConfig.max_allowd_cw_errors)
       strMessage += "[ERR]";
 
+    String dt = "";
+    if (UserConfig.enable_rtc)
+      dt = "[" + strRTCDateTime() + "] ";
+
     if (!(!UserConfig.enable_emptymsg && strMessage.length() == 0))
-      Serial.print("\r\n" + String(s_address) + ";" + functions[function] + ";" + strMessage+"[CW"+String(used_cw_counter)+"]");
+      Serial.print("\r\n" + dt + String(s_address) + ";" + functions[function] + ";" + strMessage+"[CW"+String(used_cw_counter)+"]");
   }
 }
 

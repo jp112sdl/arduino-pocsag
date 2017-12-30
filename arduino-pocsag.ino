@@ -44,7 +44,7 @@
 
 #define MSGLENGTH 	                244
 #define BITCOUNTERLENGTH	          440
-#define MAXNUMBATCHES		             32
+#define MAXNUMBATCHES		            36
 
 static const char *functions[4] = {"A", "B", "C", "D"};
 enum {OFF, ON};
@@ -110,8 +110,11 @@ void loop() {
         set_pmbled(ON);
         if (UserConfig.fsa_timeout_minutes > 0) {
           last_pmb_millis = millis();
-          if (UserConfig.enable_led && field_strength_alarm) set_fsaled(OFF);
-          field_strength_alarm = false;
+          if (field_strength_alarm) {
+            if (UserConfig.enable_led) set_fsaled(OFF);
+            field_strength_alarm = false;
+            Serial.println("\r\n[" + strRTCDateTime() + "] +++ Field Strength OK! +++");
+          }
         }
       }
       break;
@@ -182,7 +185,7 @@ void loop() {
     if (last_pmb_millis > millis())
       last_pmb_millis = millis();
     if (!field_strength_alarm && (last_pmb_millis == 0 || millis() - last_pmb_millis > UserConfig.fsa_timeout_minutes * 60000)) {
-      Serial.println("\r\n=== [" + strRTCDateTime() + "] +++ Field Strength Alarm! +++");
+      Serial.println("\r\n[" + strRTCDateTime() + "] +++ Field Strength Alarm! +++");
       field_strength_alarm = true;
       set_fsaled(ON);
     }
@@ -315,6 +318,6 @@ void decode_wordbuffer() {
     print_message(address[address_counter - 1], function[address_counter - 1], message, used_cw_counter);
     if (UserConfig.DebugLevel == DL_MAX)  Serial.print("\r\naddress_counter = " + String(address_counter));
   }
-  if (UserConfig.DebugLevel > DL_OFF) Serial.print("\r\n=== [" + strRTCDateTime() + "] CW(" + String(used_cw_counter) + ") E(" + String(decode_errorcount) + ") " + String(millis() - start_millis) + "ms ===");
+  if (UserConfig.DebugLevel > DL_OFF) Serial.print("\r\n[" + strRTCDateTime() + "] CW(" + String(used_cw_counter) + ") E(" + String(decode_errorcount) + ") " + String(millis() - start_millis) + "ms");
   decode_errorcount = 0;
 }
