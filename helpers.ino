@@ -89,7 +89,8 @@ void set_cwerrled(bool state) {
 
 unsigned long extract_address(int idx) {
   unsigned long address = 0;
-  int pos = idx / 2;
+  //int pos = idx / 2;
+  int pos = ( idx % 16 )/2; 
   for (int i = 1; i < 19; i++) {
     bitWrite(address, 21 - i, bitRead(wordbuffer[idx], 31 - i));
   }
